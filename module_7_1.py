@@ -77,13 +77,19 @@ class Shop:
 
     def  add(self, *products):
 
-        file_p=self.get_products()
+        file=open(self.__file_name, 'r')
         for prod in products:
             flag=True
-            for line in file_p:
+            flag_ex=True
+
+            i=0
+            while flag_ex:
+                line=file.readline(i)
+                i+=1
                 if prod in line:
                     print(f'Продукт {prod} уже есть в магазине ')
                     flag=False
+                    flag_ex = False
                     break
                 else:
                     flag=True
