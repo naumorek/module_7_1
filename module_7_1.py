@@ -47,7 +47,9 @@ Potato, 5.5, Vegetables
 При проверке на существование товара в методе add можно вызывать метод get_products для получения текущих продуктов.
 Не забывайте закрывать файл вызывая метод close() у объектов файла.'''
 
-import pprint
+
+import os
+
 
 class Product:
     def __init__(self,name,weight,category):
@@ -66,37 +68,35 @@ class Shop:
 
     def __init__(self,__file_name='products.txt'):
         self.__file_name=__file_name
+        if os.path.exists(__file_name):
+            a="ok"
+        else:
+            with open(self.__file_name, 'w') as file:
+                a='ok'
 
     def get_products(self):
-        file=open(self.__file_name, 'r')
-        a=file.read()
-        file.close()
-        return a
+        with open(self.__file_name, 'r') as  file:
+            a=file.read()
+            return a
 
 
 
     def  add(self, *products):
+        file_list=self.get_products()
 
-        file=open(self.__file_name, 'r')
-        for prod in products:
-            flag=True
-            flag_ex=True
+        for name_veg in products:
+            if name_veg.name in file_list:
+                print(f'Продукт {name_veg.name} уже есть в магазине ')
+            else:
+                with open(self.__file_name, 'w') as  file:
+                    file_list=file_list+f'{name_veg}\n'
+                    file.write(file_list)
 
-            i=0
-            while flag_ex:
-                line=file.readline(i)
-                i+=1
-                if prod in line:
-                    print(f'Продукт {prod} уже есть в магазине ')
-                    flag=False
-                    flag_ex = False
-                    break
-                else:
-                    flag=True
-            if flag:
-                file = open(self.__file_name, 'w')
-                file.write(f'{prod} \n')
-                file.close()
+
+
+
+
+
 
 
 
